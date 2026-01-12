@@ -1,0 +1,20 @@
+# Dependências (pesadas, o npm install baixa depois)
+node_modules
+/backend/node_modules
+/frontend/node_modules
+
+# Arquivos de sistema e logs
+.DS_Store
+*.log
+npm-debug.log*
+
+# Variáveis de Ambiente (SEGURANÇA: NUNCA SUBIR ISSO)
+.env
+.env.local
+
+# Build de produção
+dist
+build
+
+# Banco de dados local (se estiver usando sqlite ou similar, mas bom prevenir)
+/postgres_data

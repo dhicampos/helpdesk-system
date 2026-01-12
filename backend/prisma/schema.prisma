@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client-js"
+  // Sem output, sem engineType. Deixe o Prisma decidir o padrão.
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TesteConexao {
+  id        Int      @id @default(autoincrement())
+  mensagem  String
+  criadoEm  DateTime @default(now())
+}

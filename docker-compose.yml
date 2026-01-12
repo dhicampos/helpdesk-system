@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  # Serviço do Banco de Dados
+  db:
+    image: postgres:15-alpine
+    container_name: helpdesk_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: muzukashi123,.;
+      POSTGRES_DB: helpdesk_local
+    ports:
+      - "5432:5432" # Porta do seu PC : Porta de dentro do Container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Isso garante que os dados não sumam se desligar o container
+
+volumes:
+  postgres_data:
