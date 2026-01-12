@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  // Sem output, sem engineType. Deixe o Prisma decidir o padrão.
 }
 
 datasource db {
@@ -8,8 +7,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model TesteConexao {
+// 1. ENUMS: São listas fixas de opções. Evita que alguém escreva "Admim" errado.
+enum Perfil {
+  ADMIN
+  TECNICO
+  SOLICITANTE
+}
+
+enum StatusChamado {
+  ABERTO
+  EM_ANDAMENTO
+  AGUARDANDO_PECA
+  CONCLUIDO
+}
+
+// 2. MODELO DE USUÁRIO
+model Usuario {
   id        Int      @id @default(autoincrement())
-  mensagem  String
+  nome      String
+  email     String   @unique // Não pode ter dois iguais
+  senha     String   // Por enquanto texto puro (depois vamos criptografar)
+  perfil    Perfil   @default(SOLICITANTE)
   criadoEm  DateTime @default(now())
+
+  // Relacionamento: Um usuário tem vários chamados abertos
+  chamadosAbertos Chamado[] 
+}
+
+// 3. MODELO DE CHAMADO
+model Chamado {
+  id          Int           @id @default(autoincrement())
+  titulo      String
+  descricao   String
+  status      StatusChamado @default(ABERTO)
+  
+  // Integração com Patrimônio (Opção A Híbrida)
+  patrimonioId String?      // ID ou Código do equipamento (pode ser nulo se for dúvida geral)
+  localizacao  String?      // Onde está o problema (Setor A, Sala 2)
+
+  criadoEm    DateTime      @default(now())
+  atualizadoEm DateTime     @updatedAt
+
+  // Quem abriu o chamado? (Chave Estrangeira)
+  solicitanteId Int
+  solicitante   Usuario     @relation(fields: [solicitanteId], references: [id])
 }
